@@ -6,7 +6,7 @@ public class Prepulsion : MonoBehaviour
 {
 	Rigidbody rb;
 	Animator anim;
-	//PlayerStats playerStats;
+	PlayerStats playerStats;
 	
 	KeyCode preUpKey = KeyCode.E;
 	KeyCode preFwdAirKey = KeyCode.R;
@@ -15,24 +15,24 @@ public class Prepulsion : MonoBehaviour
 	static readonly float preUpAnimationDuration = 0.458f / preUpAnimationDurationMultiplier;
 	
 	static readonly float preFwdAirAnimationDurationMultiplier = 1f;
-	static readonly float preFwdAirAnimationDuration = 0.467f / preFwdAirAnimationDurationMultiplier;
+	static readonly float preFwdAirAnimationDuration = 0.567f / preFwdAirAnimationDurationMultiplier;
 	
 
     void Start()
     {
         rb = GetComponent<Rigidbody>();
 		anim = GetComponent<Animator>();
-		//playerStats = GetComponent<PlayerStats>();
+		playerStats = GetComponent<PlayerStats>();
     }
 
 
     void Update()
     {
-		if (Input.GetKeyDown(preFwdAirKey))
+		if (Input.GetKeyDown(preFwdAirKey) && playerStats.isTouchingWall && playerStats.HasWallBehind())
 		{
 			StartCoroutine("PropelForwardAir");
 		}
-        if (Input.GetKeyDown(preUpKey))
+        if (Input.GetKeyDown(preUpKey) && playerStats.isTouchingFloor)
 		{
 			StartCoroutine("PropelUpwards");
 		}
@@ -42,7 +42,7 @@ public class Prepulsion : MonoBehaviour
 	{
 		anim.SetBool("AirKickFwd", true);
 		yield return new WaitForSeconds(preFwdAirAnimationDuration);
-		rb.linearVelocity = new Vector3(0,2f,10f);
+		rb.linearVelocity = new Vector3(0,0,0) + (transform.forward * 10) + (Vector3.up * 4);
 		anim.SetBool("AirKickFwd", false);
 	}
 	

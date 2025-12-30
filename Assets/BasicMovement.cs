@@ -1,7 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(Rigidbody))]
 public class BasicMovement : MonoBehaviour
 {
     [Header("Movement")]
@@ -14,10 +13,15 @@ public class BasicMovement : MonoBehaviour
     [SerializeField] float minPitch = -35f;
     [SerializeField] float maxPitch = 65f;
 
+    Rigidbody rb;
     float pitch;
+    Vector3 moveInput;
+    float yawDelta;
 
     void Start()
     {
+        rb = GetComponent<Rigidbody>();
+
         if (cameraTransform == null && Camera.main != null)
         {
             cameraTransform = Camera.main.transform;
@@ -29,25 +33,23 @@ public class BasicMovement : MonoBehaviour
 
     void Update()
     {
-        HandleMovement();
+        ReadMovementInput();
         HandleLook();
     }
 
-    void HandleMovement()
+    void FixedUpdate()
     {
-        Vector3 moveInput = Vector3.zero;
+        HandleMovement();
+    }
+
+    void ReadMovementInput()
+    {
+        moveInput = Vector3.zero;
 
         if (Input.GetKey(KeyCode.W)) { moveInput += Vector3.forward; }
         if (Input.GetKey(KeyCode.S)) { moveInput += Vector3.back; }
         if (Input.GetKey(KeyCode.A)) { moveInput += Vector3.left; }
         if (Input.GetKey(KeyCode.D)) { moveInput += Vector3.right; }
-
-        if (moveInput.sqrMagnitude > 0f)
-        {
-            moveInput.Normalize();
-            Vector3 worldMove = transform.TransformDirection(moveInput) * moveSpeed * Time.deltaTime;
-            transform.position += worldMove;
-        }
     }
 
     void HandleLook()
@@ -55,7 +57,7 @@ public class BasicMovement : MonoBehaviour
         float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity;
         float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity;
 
-        transform.Rotate(Vector3.up, mouseX * turnSpeed * Time.deltaTime);
+        yawDelta += mouseX * turnSpeed * Time.deltaTime;
 
         pitch -= mouseY;
         pitch = Mathf.Clamp(pitch, minPitch, maxPitch);
@@ -67,4 +69,22 @@ public class BasicMovement : MonoBehaviour
             cameraTransform.localEulerAngles = localEuler;
         }
     }
+
+    void HandleMovement()
+    {
+        if (moveInput.sqrMagnitude > 0f)
+        {
+            moveInput.Normalize();
+            Vector3 worldMove = transform.TransformDirection(moveInput) * moveSpeed * Time.fixedDeltaTime;
+            rb.MovePosition(rb.position + worldMove);
+        }
+
+        if (Mathf.Abs(yawDelta) > 0f)
+        {
+            Quaternion yawRotation = Quaternion.Euler(0f, yawDelta, 0f);
+            rb.MoveRotation(rb.rotation * yawRotation);
+            yawDelta = 0f;
+        }
+    }
+
 }
