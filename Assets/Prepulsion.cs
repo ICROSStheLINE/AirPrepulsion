@@ -40,8 +40,13 @@ public class Prepulsion : MonoBehaviour
 	
 	IEnumerator PropelForwardAir()
 	{
+		// TODO: Make WallDetection and FloorDetection objects functional and make INVISIBLE map geometry
+		// that would be the only interactable objects when handling mesh geometry
+		// In other words, mesh environments should have an invisible wall behind every object that would be 
+		// the only thing the player should be able to kick off of.
+		
 		anim.SetBool("AirKickFwd", true);
-		yield return new WaitForSeconds(preFwdAirAnimationDuration);
+		yield return new WaitForSeconds(preFwdAirAnimationDuration/2);
 		rb.linearVelocity = new Vector3(0,0,0) + (transform.forward * 10) + (Vector3.up * 4);
 		anim.SetBool("AirKickFwd", false);
 	}

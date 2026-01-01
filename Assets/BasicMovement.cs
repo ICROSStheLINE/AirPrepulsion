@@ -8,7 +8,7 @@ public class BasicMovement : MonoBehaviour
     [SerializeField] float turnSpeed = 180f;
 
     [Header("Camera")]
-    [SerializeField] Transform cameraTransform;
+    Transform cameraTransform;
     [SerializeField] float mouseSensitivity = 2f;
     [SerializeField] float minPitch = -35f;
     [SerializeField] float maxPitch = 65f;
@@ -68,6 +68,9 @@ public class BasicMovement : MonoBehaviour
             localEuler.x = pitch;
             cameraTransform.localEulerAngles = localEuler;
         }
+		
+		// TODO: Have a raycast between character's head and the camera to determine if there is anything
+		// blocking the player's vision of the character
     }
 
     void HandleMovement()
