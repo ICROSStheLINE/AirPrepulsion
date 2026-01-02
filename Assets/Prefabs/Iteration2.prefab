@@ -146,6 +146,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 687471655695718766}
+  - component: {fileID: 512963768592869296}
   - component: {fileID: 1464921265908553379}
   m_Layer: 0
   m_Name: WallDetectBehind
@@ -163,12 +164,25 @@ Transform:
   m_GameObject: {fileID: 5109504511004952037}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.001, y: 0.763, z: -0.2675}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5619010292850597674}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &512963768592869296
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5109504511004952037}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 938835030eff0ba41b8598f4661542df, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  surfaceTag: Wall
 --- !u!65 &1464921265908553379
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -188,8 +202,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.19201946, y: 0.91884875, z: 0.5252991}
-  m_Center: {x: 0.057363033, y: -0.040575624, z: -0.0468235}
+  m_Size: {x: 0.4714222, y: 0.8232465, z: 0.51024055}
+  m_Center: {x: -0.0037059784, y: 0.52825403, z: -0.31076908}
 --- !u!1 &5794580269350695866
 GameObject:
   m_ObjectHideFlags: 0
@@ -199,6 +213,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8063509737659158688}
+  - component: {fileID: 926826268067384923}
   - component: {fileID: 6276404051213124097}
   m_Layer: 0
   m_Name: FloorDetection
@@ -222,6 +237,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 5619010292850597674}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &926826268067384923
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5794580269350695866}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 938835030eff0ba41b8598f4661542df, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  surfaceTag: Floor
 --- !u!65 &6276404051213124097
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -445,7 +473,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 6
   turnSpeed: 180
-  cameraTransform: {fileID: 0}
   mouseSensitivity: 2
   minPitch: -35
   maxPitch: 65

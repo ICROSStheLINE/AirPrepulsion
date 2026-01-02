@@ -7,9 +7,10 @@ public class Prepulsion : MonoBehaviour
 	Rigidbody rb;
 	Animator anim;
 	PlayerStats playerStats;
-	
 	KeyCode preUpKey = KeyCode.E;
 	KeyCode preFwdAirKey = KeyCode.R;
+	
+	Vector3 awayFromWall;
 	
 	static readonly float preUpAnimationDurationMultiplier = 1.2f;
 	static readonly float preUpAnimationDuration = 0.458f / preUpAnimationDurationMultiplier;
@@ -30,6 +31,14 @@ public class Prepulsion : MonoBehaviour
     {
 		if (Input.GetKeyDown(preFwdAirKey) && playerStats.isTouchingWall && playerStats.HasWallBehind())
 		{
+			// TODO: 
+			// - Make it so that holding down the preFwdAirKey key makes the player character hold onto the wall
+			// instead of immediately kicking off of it.
+			// - Letting go of the preFwdAirKey key should make the player character kick off of it as usual
+			// - Once camera movement around walls is handled we can make the camera cinematically move to a 
+			// good position when the player is holding onto the wall, then we can let the player choose 
+			// which direction to jump towards
+			
 			StartCoroutine("PropelForwardAir");
 		}
         if (Input.GetKeyDown(preUpKey) && playerStats.isTouchingFloor)
@@ -38,16 +47,15 @@ public class Prepulsion : MonoBehaviour
 		}
     }
 	
+	
+	
 	IEnumerator PropelForwardAir()
 	{
-		// TODO: Make WallDetection and FloorDetection objects functional and make INVISIBLE map geometry
-		// that would be the only interactable objects when handling mesh geometry
-		// In other words, mesh environments should have an invisible wall behind every object that would be 
-		// the only thing the player should be able to kick off of.
-		
+		TeleportToRandomWall();
+
 		anim.SetBool("AirKickFwd", true);
-		yield return new WaitForSeconds(preFwdAirAnimationDuration/2);
-		rb.linearVelocity = new Vector3(0,0,0) + (transform.forward * 10) + (Vector3.up * 4);
+		yield return new WaitForSeconds(preFwdAirAnimationDuration/4);
+		rb.linearVelocity = (awayFromWall * 10f) + (Vector3.up * 4f);
 		anim.SetBool("AirKickFwd", false);
 	}
 	
@@ -58,5 +66,38 @@ public class Prepulsion : MonoBehaviour
 		anim.SetBool("ShootDown", false);
 		rb.linearVelocity = new Vector3(0,10f,0);
 		anim.SetBool("FallingIdle", true);
+	}
+	
+	void TeleportToRandomWall()
+	{
+		GameObject kickedWall = null;
+		foreach (GameObject wall in playerStats.touchingWalls)
+		{
+			if (wall == null) continue;
+			kickedWall = wall;
+			break;
+		}
+
+		if (kickedWall == null)
+		{
+			return;
+		}
+
+		Collider wallCollider = kickedWall.GetComponent<Collider>();
+		Vector3 closestPoint = wallCollider.ClosestPoint(transform.position);
+		awayFromWall = transform.position - closestPoint;
+		awayFromWall.y = 0f;
+		if (awayFromWall.sqrMagnitude > 0.0001f)
+		{
+			awayFromWall.Normalize();
+			transform.rotation = Quaternion.LookRotation(awayFromWall, Vector3.up);
+		}
+		else
+		{
+			awayFromWall = transform.forward;
+		}
+
+		const float wallClearance = 0.3f;
+		transform.position = closestPoint + awayFromWall * wallClearance;
 	}
 }

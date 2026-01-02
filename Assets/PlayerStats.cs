@@ -5,61 +5,55 @@ using UnityEngine;
 public class PlayerStats : MonoBehaviour
 {
 	Animator anim;
-	
+
     [HideInInspector] public bool isTouchingFloor = true;
 	[HideInInspector] public bool isTouchingWall = false;
 	[HideInInspector] public readonly HashSet<GameObject> touchingWalls = new HashSet<GameObject>();
 
-	
-	
+
     void Start()
     {
         anim = GetComponent<Animator>();
     }
 
-    // Update is called once per frame
     void Update()
     {
 
     }
-	
-	void OnCollisionEnter(Collision collision)
+
+	public void ReceivedContact(string surfaceTag, Collider surfaceCollision)
 	{
-		if (collision.gameObject.tag == "Wall")
-		{
-			touchingWalls.Add(collision.gameObject);
-			isTouchingWall = true;
-		}
-	}
-	
-	void OnCollisionExit(Collision collision)
-	{
-		if (collision.gameObject.tag == "Wall")
-		{
-			touchingWalls.Remove(collision.gameObject);
-			isTouchingWall = false;
-		}
-	}
-	
-	void OnTriggerEnter(Collider collider)
-	{
-		if (collider.gameObject.tag == "Floor")
+		if (surfaceTag == "Floor")
 		{
 			isTouchingFloor = true;
 			anim.SetBool("FallingIdle", false);
 		}
+		if (surfaceTag == "Wall")
+		{
+			touchingWalls.Add(surfaceCollision.gameObject);
+			isTouchingWall = true;
+		}
 	}
-	
-	void OnTriggerExit(Collider collider)
+
+	public void ExitContact(string surfaceTag, Collider surfaceCollision)
 	{
-		if (collider.gameObject.tag == "Floor")
+		if (surfaceTag == "Floor")
 		{
 			isTouchingFloor = false;
 			anim.SetBool("FallingIdle", true);
+			Debug.Log("Exit Floor");
+		}
+		if (surfaceTag == "Wall")
+		{
+			touchingWalls.Remove(surfaceCollision.gameObject);
+			isTouchingWall = false;
+			Debug.Log("Exit Walls");
 		}
 	}
 	
-	public bool HasWallBehind(float maxAngle = 90f, float maxDistance = 2f)
+	
+	
+	public bool HasWallBehind(float maxAngle = 90f, float maxDistance = 40f)
 	{
 		Vector3 behind = -transform.forward;
 		behind.y = 0f;
