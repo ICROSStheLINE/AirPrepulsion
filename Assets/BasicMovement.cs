@@ -8,15 +8,19 @@ public class BasicMovement : MonoBehaviour
     [SerializeField] float turnSpeed = 180f;
 
     [Header("Camera")]
-    Transform cameraTransform;
     [SerializeField] float mouseSensitivity = 2f;
     [SerializeField] float minPitch = -35f;
     [SerializeField] float maxPitch = 65f;
 
+    [Header("GameObjects")]
+    [SerializeField] GameObject cameraReturnPoint;
+
     Rigidbody rb;
+    Transform cameraTransform;
     float pitch;
     Vector3 moveInput;
     float yawDelta;
+    bool isCameraOccluded;
 
     void Start()
     {
@@ -40,6 +44,7 @@ public class BasicMovement : MonoBehaviour
     void FixedUpdate()
     {
         HandleMovement();
+        CheckCameraOcclusion();
     }
 
     void ReadMovementInput()
@@ -68,9 +73,6 @@ public class BasicMovement : MonoBehaviour
             localEuler.x = pitch;
             cameraTransform.localEulerAngles = localEuler;
         }
-		
-		// TODO: Have a raycast between character's head and the camera to determine if there is anything
-		// blocking the player's vision of the character
     }
 
     void HandleMovement()
@@ -90,4 +92,58 @@ public class BasicMovement : MonoBehaviour
         }
     }
 
+    void CheckCameraOcclusion()
+    {
+        if (cameraTransform == null || cameraReturnPoint == null) // If there is no camera don't do ts LOL
+        {
+            isCameraOccluded = false;
+            return;
+        }
+
+        Vector3 headPosition = transform.position + Vector3.up;
+        Vector3 targetPosition = cameraReturnPoint.transform.position;
+        Vector3 toTarget = targetPosition - headPosition;
+        float distance = toTarget.magnitude;
+        if (distance <= 0.001f)
+        {
+            isCameraOccluded = false;
+            return;
+        }
+        Vector3 direction = toTarget / distance;
+        
+        RaycastHit hit;
+        int playerMask = LayerMask.GetMask("Player"); // Player layer mask
+        int layerMask = Physics.AllLayers ^ playerMask; // All layers EXCEPT THE player layer
+        isCameraOccluded = Physics.Raycast( // Raycast checks if the path to the default camera position (cameraReturnPoint.transform.position) is blocked
+            headPosition,
+            direction,
+            out hit,
+            distance,
+            layerMask,
+            QueryTriggerInteraction.Ignore);
+
+        Debug.DrawLine(
+            headPosition,
+            targetPosition,
+            isCameraOccluded ? Color.red : Color.green);
+
+        if (isCameraOccluded)
+        {
+            MoveCameraAroundOcclusion(hit.point);
+        }
+        else
+        {
+            ReturnCameraToPoint();
+        }
+    }
+
+    void MoveCameraAroundOcclusion(Vector3 occlusionPoint)
+    {
+        cameraTransform.position = occlusionPoint;
+    }
+
+    void ReturnCameraToPoint()
+    {
+        cameraTransform.position = cameraReturnPoint.transform.position;
+    }
 }

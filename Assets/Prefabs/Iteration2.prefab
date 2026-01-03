@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2217807272334397842
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6874314892849015181}
+  m_Layer: 0
+  m_Name: CameraReturnPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6874314892849015181
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2217807272334397842}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0.25881928, y: -0, z: -0, w: 0.9659258}
+  m_LocalPosition: {x: -0.008000374, y: 4.6, z: -4.38}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5619010292850597674}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4676570977540814957
 GameObject:
   m_ObjectHideFlags: 0
@@ -323,6 +354,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Iteration2
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 44efd5c374dcd8540a0d0c95e4d28434, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 5866666021909216657, guid: 44efd5c374dcd8540a0d0c95e4d28434, type: 3}
       propertyPath: m_Controller
       value: 
@@ -334,6 +369,9 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 44efd5c374dcd8540a0d0c95e4d28434, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6874314892849015181}
     - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 44efd5c374dcd8540a0d0c95e4d28434, type: 3}
       insertIndex: -1
       addedObject: {fileID: 3075829944672577296}
@@ -476,6 +514,7 @@ MonoBehaviour:
   mouseSensitivity: 2
   minPitch: -35
   maxPitch: 65
+  cameraReturnPoint: {fileID: 2217807272334397842}
 --- !u!65 &4666374991154008578
 BoxCollider:
   m_ObjectHideFlags: 0
