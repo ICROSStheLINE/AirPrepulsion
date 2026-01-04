@@ -6,8 +6,12 @@ public class PlayerStats : MonoBehaviour
 {
 	Animator anim;
 
+	[HideInInspector] public bool canMove = true;
+	[HideInInspector] public bool canLook = true;
+
     [HideInInspector] public bool isTouchingFloor = true;
 	[HideInInspector] public bool isTouchingWall = false;
+	[HideInInspector] public bool isHanging = false;
 	[HideInInspector] public readonly HashSet<GameObject> touchingWalls = new HashSet<GameObject>();
 
 

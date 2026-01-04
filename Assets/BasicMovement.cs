@@ -16,6 +16,7 @@ public class BasicMovement : MonoBehaviour
     [SerializeField] GameObject cameraReturnPoint;
 
     Rigidbody rb;
+	PlayerStats playerStats;
     Transform cameraTransform;
     float pitch;
     Vector3 moveInput;
@@ -25,6 +26,7 @@ public class BasicMovement : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+		playerStats = GetComponent<PlayerStats>();
 
         if (cameraTransform == null && Camera.main != null)
         {
@@ -37,8 +39,10 @@ public class BasicMovement : MonoBehaviour
 
     void Update()
     {
-        ReadMovementInput();
-        HandleLook();
+		if (playerStats.canMove) ReadMovementInput();
+		else moveInput = Vector3.zero;
+		
+		if (playerStats.canLook) HandleLook();
     }
 
     void FixedUpdate()

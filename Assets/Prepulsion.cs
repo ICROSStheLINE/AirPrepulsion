@@ -10,9 +10,8 @@ public class Prepulsion : MonoBehaviour
 	KeyCode preUpKey = KeyCode.E;
 	KeyCode preFwdAirKey = KeyCode.R;
 	
-	GameObject kickedWall = null;
+	GameObject interactedWall = null;
 	Vector3 awayFromWall;
-	bool isHanging = false;
 	
 	static readonly float preUpAnimationDurationMultiplier = 1.2f;
 	static readonly float preUpAnimationDuration = 0.458f / preUpAnimationDurationMultiplier;
@@ -33,17 +32,17 @@ public class Prepulsion : MonoBehaviour
     {
 		if (Input.GetKeyDown(preFwdAirKey) && playerStats.isTouchingWall && playerStats.HasWallBehind())
 		{
-			HangOnWall();
+			HangOnWall(true);
 		}
-		if (Input.GetKeyUp(preFwdAirKey) && isHanging)
+		if (Input.GetKeyUp(preFwdAirKey) && playerStats.isHanging)
 		{
 			// TODO: 
 			// - Make it so that holding down the preFwdAirKey key makes the player character hold onto the wall instead of immediately kicking off of it.
 			// - Letting go of the preFwdAirKey key should make the player character kick off of it as usual
 			// - Once camera movement around walls is handled we can make the camera cinematically move to a good position when the player is holding onto 
 			// the wall, then we can let the player choose which direction to jump towards
-			isHanging = false;
-			anim.SetBool("Hanging", false);
+			
+			HangOnWall(false);
 			StartCoroutine("PropelForwardAir");
 		}
         if (Input.GetKeyDown(preUpKey) && playerStats.isTouchingFloor)
@@ -52,12 +51,15 @@ public class Prepulsion : MonoBehaviour
 		}
     }
 	
-	void HangOnWall()
+	void HangOnWall(bool hangStatus = true)
 	{
 		TeleportToRandomWall();
-		isHanging = true;
-		FaceTowardsSpot(kickedWall);
-		anim.SetBool("Hanging", true);
+		playerStats.canMove = !hangStatus;
+		playerStats.canLook = !hangStatus;
+		playerStats.isHanging = hangStatus;
+		FaceTowardsSpot(interactedWall);
+		anim.SetBool("Hanging", hangStatus);
+		rb.isKinematic = hangStatus;
 	}
 	
 	IEnumerator PropelForwardAir()
@@ -81,20 +83,20 @@ public class Prepulsion : MonoBehaviour
 	
 	void TeleportToRandomWall() 
 	{
-		kickedWall = null;
+		interactedWall = null;
 		foreach (GameObject wall in playerStats.touchingWalls)
 		{
 			if (wall == null) continue;
-			kickedWall = wall;
+			interactedWall = wall;
 			break;
 		}
 
-		if (kickedWall == null)
+		if (interactedWall == null)
 		{
 			return;
 		}
 
-		Collider wallCollider = kickedWall.GetComponent<Collider>();
+		Collider wallCollider = interactedWall.GetComponent<Collider>();
 		Vector3 closestPoint = wallCollider.ClosestPoint(transform.position);
 		awayFromWall = transform.position - closestPoint;
 		awayFromWall.y = 0f;
