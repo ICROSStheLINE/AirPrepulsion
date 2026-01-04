@@ -29,12 +29,6 @@ public class Prepulsion : MonoBehaviour
     {
 		if (Input.GetKeyUp(preFwdAirKey) && playerStats.isHanging)
 		{
-			// TODO: 
-			// - Make it so that holding down the preFwdAirKey key makes the player character hold onto the wall instead of immediately kicking off of it.
-			// - Letting go of the preFwdAirKey key should make the player character kick off of it as usual
-			// - Once camera movement around walls is handled we can make the camera cinematically move to a good position when the player is holding onto 
-			// the wall, then we can let the player choose which direction to jump towards
-			
 			hanging.HangOnWall(false);
 			StartCoroutine("PropelForwardAir");
 		}
