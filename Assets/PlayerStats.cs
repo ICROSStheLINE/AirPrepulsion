@@ -41,13 +41,11 @@ public class PlayerStats : MonoBehaviour
 		{
 			isTouchingFloor = false;
 			anim.SetBool("FallingIdle", true);
-			Debug.Log("Exit Floor");
 		}
 		if (surfaceTag == "Wall")
 		{
 			touchingWalls.Remove(surfaceCollision.gameObject);
 			isTouchingWall = false;
-			Debug.Log("Exit Walls");
 		}
 	}
 	

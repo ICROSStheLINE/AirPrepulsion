@@ -10,7 +10,9 @@ public class Prepulsion : MonoBehaviour
 	KeyCode preUpKey = KeyCode.E;
 	KeyCode preFwdAirKey = KeyCode.R;
 	
+	GameObject kickedWall = null;
 	Vector3 awayFromWall;
+	bool isHanging = false;
 	
 	static readonly float preUpAnimationDurationMultiplier = 1.2f;
 	static readonly float preUpAnimationDuration = 0.458f / preUpAnimationDurationMultiplier;
@@ -31,14 +33,17 @@ public class Prepulsion : MonoBehaviour
     {
 		if (Input.GetKeyDown(preFwdAirKey) && playerStats.isTouchingWall && playerStats.HasWallBehind())
 		{
+			HangOnWall();
+		}
+		if (Input.GetKeyUp(preFwdAirKey) && isHanging)
+		{
 			// TODO: 
-			// - Make it so that holding down the preFwdAirKey key makes the player character hold onto the wall
-			// instead of immediately kicking off of it.
+			// - Make it so that holding down the preFwdAirKey key makes the player character hold onto the wall instead of immediately kicking off of it.
 			// - Letting go of the preFwdAirKey key should make the player character kick off of it as usual
-			// - Once camera movement around walls is handled we can make the camera cinematically move to a 
-			// good position when the player is holding onto the wall, then we can let the player choose 
-			// which direction to jump towards
-			
+			// - Once camera movement around walls is handled we can make the camera cinematically move to a good position when the player is holding onto 
+			// the wall, then we can let the player choose which direction to jump towards
+			isHanging = false;
+			anim.SetBool("Hanging", false);
 			StartCoroutine("PropelForwardAir");
 		}
         if (Input.GetKeyDown(preUpKey) && playerStats.isTouchingFloor)
@@ -47,7 +52,13 @@ public class Prepulsion : MonoBehaviour
 		}
     }
 	
-	
+	void HangOnWall()
+	{
+		TeleportToRandomWall();
+		isHanging = true;
+		FaceTowardsSpot(kickedWall);
+		anim.SetBool("Hanging", true);
+	}
 	
 	IEnumerator PropelForwardAir()
 	{
@@ -68,9 +79,9 @@ public class Prepulsion : MonoBehaviour
 		anim.SetBool("FallingIdle", true);
 	}
 	
-	void TeleportToRandomWall()
+	void TeleportToRandomWall() 
 	{
-		GameObject kickedWall = null;
+		kickedWall = null;
 		foreach (GameObject wall in playerStats.touchingWalls)
 		{
 			if (wall == null) continue;
@@ -87,17 +98,26 @@ public class Prepulsion : MonoBehaviour
 		Vector3 closestPoint = wallCollider.ClosestPoint(transform.position);
 		awayFromWall = transform.position - closestPoint;
 		awayFromWall.y = 0f;
-		if (awayFromWall.sqrMagnitude > 0.0001f)
-		{
-			awayFromWall.Normalize();
-			transform.rotation = Quaternion.LookRotation(awayFromWall, Vector3.up);
-		}
-		else
-		{
-			awayFromWall = transform.forward;
-		}
-
-		const float wallClearance = 0.3f;
-		transform.position = closestPoint + awayFromWall * wallClearance;
+		FaceTowardsSpot(awayFromWall);
+		
+		const float wallClearance = 4.3f;
+		transform.position = closestPoint + awayFromWall * wallClearance; // TODO: Make this line teleport the player a fixed distance away from the wall. At the moment the player's position has a slight influence on the awayFromWall variable. Figure out a way to solve that.
+	}
+	
+	void FaceTowardsSpot(Vector3 spot)
+	{
+		spot.Normalize();
+		transform.rotation = Quaternion.LookRotation(spot, Vector3.up);
+	}
+	
+	void FaceTowardsSpot(GameObject objectWithCollider)
+	{
+		Vector3 towardsObject;
+		Collider objectCollider = objectWithCollider.GetComponent<Collider>();
+		Vector3 closestPoint = objectCollider.ClosestPoint(transform.position);
+		towardsObject = closestPoint - transform.position;
+		towardsObject.y = 0f;
+		towardsObject.Normalize();
+		transform.rotation = Quaternion.LookRotation(towardsObject, Vector3.up);
 	}
 }
