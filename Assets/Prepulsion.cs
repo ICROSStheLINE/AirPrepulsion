@@ -98,10 +98,11 @@ public class Prepulsion : MonoBehaviour
 		Vector3 closestPoint = wallCollider.ClosestPoint(transform.position);
 		awayFromWall = transform.position - closestPoint;
 		awayFromWall.y = 0f;
+		awayFromWall = awayFromWall.normalized;
 		FaceTowardsSpot(awayFromWall);
 		
-		const float wallClearance = 4.3f;
-		transform.position = closestPoint + awayFromWall * wallClearance; // TODO: Make this line teleport the player a fixed distance away from the wall. At the moment the player's position has a slight influence on the awayFromWall variable. Figure out a way to solve that.
+		const float wallClearance = 0.4f;
+		transform.position = closestPoint + awayFromWall * wallClearance;
 	}
 	
 	void FaceTowardsSpot(Vector3 spot)
