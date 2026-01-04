@@ -13,6 +13,7 @@ public class PlayerStats : MonoBehaviour
 	[HideInInspector] public bool isTouchingWall = false;
 	[HideInInspector] public bool isHanging = false;
 	[HideInInspector] public readonly HashSet<GameObject> touchingWalls = new HashSet<GameObject>();
+	[HideInInspector] public GameObject interactedWall = null;
 
 
     void Start()
@@ -53,7 +54,49 @@ public class PlayerStats : MonoBehaviour
 		}
 	}
 	
-	
+	public void TeleportToRandomWall() 
+	{
+		Vector3 awayFromWall;
+		interactedWall = null;
+		foreach (GameObject wall in touchingWalls)
+		{
+			if (wall == null) continue;
+			interactedWall = wall;
+			break;
+		}
+
+		if (interactedWall == null)
+		{
+			return;
+		}
+
+		Collider wallCollider = interactedWall.GetComponent<Collider>();
+		Vector3 closestPoint = wallCollider.ClosestPoint(transform.position);
+		awayFromWall = transform.position - closestPoint;
+		awayFromWall.y = 0f;
+		awayFromWall = awayFromWall.normalized;
+		FaceTowardsSpot(awayFromWall);
+
+		const float wallClearance = 0.4f;
+		transform.position = closestPoint + awayFromWall * wallClearance;
+	}
+
+	public void FaceTowardsSpot(Vector3 spot)
+	{
+		spot.Normalize();
+		transform.rotation = Quaternion.LookRotation(spot, Vector3.up);
+	}
+
+	public void FaceTowardsSpot(GameObject objectWithCollider)
+	{
+		Vector3 towardsObject;
+		Collider objectCollider = objectWithCollider.GetComponent<Collider>();
+		Vector3 closestPoint = objectCollider.ClosestPoint(transform.position);
+		towardsObject = closestPoint - transform.position;
+		towardsObject.y = 0f;
+		towardsObject.Normalize();
+		transform.rotation = Quaternion.LookRotation(towardsObject, Vector3.up);
+	}
 	
 	public bool HasWallBehind(float maxAngle = 90f, float maxDistance = 40f)
 	{
