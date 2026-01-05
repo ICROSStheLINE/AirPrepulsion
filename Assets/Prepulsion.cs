@@ -40,7 +40,7 @@ public class Prepulsion : MonoBehaviour
 
 	IEnumerator PropelForwardAir()
 	{
-		playerStats.TeleportToRandomWall();
+		//playerStats.TeleportToRandomWall();
 
 		anim.SetBool("AirKickFwd", true);
 		yield return new WaitForSeconds(preFwdAirAnimationDuration/4);

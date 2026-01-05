@@ -48,8 +48,6 @@ Desktop.ini
 *.stacktrace
 
 # ========== Package Manager ==========
-Packages/manifest.json
-Packages/packages-lock.json
 
 # ========== Unity Collaborate ==========
 .collabignore

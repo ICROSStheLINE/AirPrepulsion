@@ -18,12 +18,9 @@ public class Hanging : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(preFwdAirKey) && playerStats.isTouchingWall && playerStats.HasWallBehind())
+        if (Input.GetKeyDown(preFwdAirKey) && playerStats.isTouchingWall && playerStats.HasWallInFront())
 		{
 			HangOnWall(true);
-			// TODO: 
-			// - Make the condition for holding onto the wall NOT be if a wall is behind a player, instead make
-			// it so that the player can hold onto the wall IN FRONT of the player.
 			
 			// TODO:
 			// - Make the camera cinematically move to a good position when the player is holding onto the wall, 
@@ -33,11 +30,11 @@ public class Hanging : MonoBehaviour
 	
 	public void HangOnWall(bool hangStatus = true)
 	{
-		playerStats.TeleportToRandomWall();
+		if (hangStatus) playerStats.TeleportToRandomWall();
 		playerStats.canMove = !hangStatus;
 		//playerStats.canLook = !hangStatus;
 		playerStats.isHanging = hangStatus;
-		playerStats.FaceTowardsSpot(playerStats.interactedWall);
+		if (hangStatus) playerStats.FaceTowardsSpot(playerStats.interactedWall);
 		anim.SetBool("Hanging", hangStatus);
 		rb.isKinematic = hangStatus;
 	}

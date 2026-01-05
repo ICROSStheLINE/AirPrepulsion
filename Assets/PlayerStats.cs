@@ -8,6 +8,7 @@ public class PlayerStats : MonoBehaviour
 
 	[HideInInspector] public bool canMove = true;
 	[HideInInspector] public bool canLook = true;
+	[HideInInspector] public bool canOcclusionCheck = true;
 
     [HideInInspector] public bool isTouchingFloor = true;
 	[HideInInspector] public bool isTouchingWall = false;
@@ -25,6 +26,8 @@ public class PlayerStats : MonoBehaviour
     {
 
     }
+
+	// Helper functions galore //
 
 	public void ReceivedContact(string surfaceTag, Collider surfaceCollision)
 	{
@@ -119,6 +122,39 @@ public class PlayerStats : MonoBehaviour
 			}
 
 			float angle = Vector3.Angle(behind, toWall);
+			if (angle <= maxAngle)
+			{
+				if (maxDistance <= 0f || toWall.sqrMagnitude <= maxDistance * maxDistance)
+				{
+					return true;
+				}
+			}
+		}
+
+		return false;
+	}
+	
+	public bool HasWallInFront(float maxAngle = 90f, float maxDistance = 40f)
+	{
+		Vector3 front = transform.forward;
+		front.y = 0f;
+		front.Normalize();
+
+		foreach (GameObject wall in touchingWalls)
+		{
+			if (wall == null)
+			{
+				continue;
+			}
+
+			Vector3 toWall = wall.transform.position - transform.position;
+			toWall.y = 0f;
+			if (toWall.sqrMagnitude == 0f)
+			{
+				continue;
+			}
+
+			float angle = Vector3.Angle(front, toWall);
 			if (angle <= maxAngle)
 			{
 				if (maxDistance <= 0f || toWall.sqrMagnitude <= maxDistance * maxDistance)
