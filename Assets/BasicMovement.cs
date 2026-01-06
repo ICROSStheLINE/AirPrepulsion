@@ -48,7 +48,7 @@ public class BasicMovement : MonoBehaviour
     void FixedUpdate()
     {
         HandleMovement();
-        CheckCameraOcclusion();
+        if (playerStats.canOcclusionCheck) CheckCameraOcclusion();
     }
 
     void ReadMovementInput()

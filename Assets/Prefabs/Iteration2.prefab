@@ -592,6 +592,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   canMove: 1
   canLook: 1
+  canOcclusionCheck: 1
   isTouchingFloor: 1
   isTouchingWall: 0
   isHanging: 0
@@ -638,6 +639,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a14b272e565e61248aee95c0a7eb98e9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cameraHangingPoint: {fileID: 6056446898089244676}
 --- !u!65 &4666374991154008578
 BoxCollider:
   m_ObjectHideFlags: 0
