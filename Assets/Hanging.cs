@@ -10,11 +10,16 @@ public class Hanging : MonoBehaviour
 	KeyCode preFwdAirKey = KeyCode.R;
 	Transform cameraTransform;
 	Coroutine cameraHangRoutine;
+	Quaternion hangBaseRotation = Quaternion.identity;
+	float hangYaw;
+	float hangPitch;
 	
 	[Header("GameObjects")]
     [SerializeField] GameObject cameraHangingPoint;
 	[Header("Random ahh Variables")]
 	[SerializeField] float cameraHangMoveSpeed = 8f;
+	[SerializeField] float hangLookSensitivity = 2f;
+	float maxHangLookAngle = 60f;
 
     void Start()
     {
@@ -36,8 +41,12 @@ public class Hanging : MonoBehaviour
 
 			StartCameraHangMove();
 			
-			// TODO: 
-			// - Then we can let the player choose which direction to jump towards
+			// TODO: The camera successfully works while hanging, now make the player's prepulsion direction be based on where the CAMERA is facing instead of where the PLAYER is facing
+		}
+
+		if (playerStats.isHanging)
+		{
+			HandleHangLook();
 		}
     }
 	
@@ -57,6 +66,12 @@ public class Hanging : MonoBehaviour
 			StopCoroutine(cameraHangRoutine);
 			cameraHangRoutine = null;
 		}
+
+		if (!hangStatus)
+		{
+			hangYaw = 0f;
+			hangPitch = 0f;
+		}
 	}
 
 	void StartCameraHangMove()
@@ -70,6 +85,10 @@ public class Hanging : MonoBehaviour
 		{
 			StopCoroutine(cameraHangRoutine);
 		}
+		hangBaseRotation = cameraHangingPoint.transform.rotation;
+		hangYaw = 0f;
+		hangPitch = 0f;
+		cameraTransform.rotation = hangBaseRotation;
 		cameraHangRoutine = StartCoroutine(MoveCameraToHangPoint());
 	}
 
@@ -84,16 +103,33 @@ public class Hanging : MonoBehaviour
 			if (toTarget.sqrMagnitude <= 0.0004f)
 			{
 				cameraTransform.position = targetPos;
-				cameraTransform.rotation = target.rotation;
 				break;
 			}
 
 			float t = 1f - Mathf.Exp(-cameraHangMoveSpeed * Time.deltaTime);
 			cameraTransform.position = current + toTarget * t;
-			cameraTransform.rotation = Quaternion.Slerp(cameraTransform.rotation, target.rotation, t);
 			yield return null;
 		}
 
 		cameraHangRoutine = null;
+	}
+
+	void HandleHangLook()
+	{
+		if (cameraTransform == null || cameraHangingPoint == null)
+		{
+			return;
+		}
+
+		float mouseX = Input.GetAxis("Mouse X") * hangLookSensitivity;
+		float mouseY = Input.GetAxis("Mouse Y") * hangLookSensitivity;
+
+		hangYaw += mouseX;
+		hangPitch -= mouseY;
+		hangYaw = Mathf.Clamp(hangYaw, -maxHangLookAngle, maxHangLookAngle);
+		hangPitch = Mathf.Clamp(hangPitch, -maxHangLookAngle, maxHangLookAngle);
+
+		Quaternion desired = hangBaseRotation * Quaternion.Euler(hangPitch, hangYaw, 0f);
+		cameraTransform.rotation = desired;
 	}
 }
