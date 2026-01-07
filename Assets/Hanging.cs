@@ -84,11 +84,13 @@ public class Hanging : MonoBehaviour
 			if (toTarget.sqrMagnitude <= 0.0004f)
 			{
 				cameraTransform.position = targetPos;
+				cameraTransform.rotation = target.rotation;
 				break;
 			}
 
 			float t = 1f - Mathf.Exp(-cameraHangMoveSpeed * Time.deltaTime);
 			cameraTransform.position = current + toTarget * t;
+			cameraTransform.rotation = Quaternion.Slerp(cameraTransform.rotation, target.rotation, t);
 			yield return null;
 		}
 

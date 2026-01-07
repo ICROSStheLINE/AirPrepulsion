@@ -149,5 +149,6 @@ public class BasicMovement : MonoBehaviour
     void ReturnCameraToPoint()
     {
         cameraTransform.position = cameraReturnPoint.transform.position;
+        cameraTransform.rotation = cameraReturnPoint.transform.rotation;
     }
 }
