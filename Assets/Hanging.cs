@@ -10,6 +10,7 @@ public class Hanging : MonoBehaviour
 	KeyCode preFwdAirKey = KeyCode.R;
 	Transform cameraTransform;
 	Coroutine cameraHangRoutine;
+	Coroutine hangTimerRoutine;
 	Quaternion hangBaseRotation = Quaternion.identity;
 	float hangYaw;
 	float hangPitch;
@@ -17,6 +18,7 @@ public class Hanging : MonoBehaviour
 	[Header("GameObjects")]
     [SerializeField] GameObject cameraHangingPoint;
 	[Header("Random ahh Variables")]
+	[SerializeField] float maxHangDuration = 2f;
 	[SerializeField] float cameraHangMoveSpeed = 8f;
 	[SerializeField] float hangLookSensitivity = 2f;
 	float maxHangLookAngle = 60f;
@@ -35,8 +37,6 @@ public class Hanging : MonoBehaviour
 
     void Update()
     {
-		// TODO: Give hanging a short timer
-
 		// TODO: Make it so that if you propel towards a designated platform you basically teleport there
 
 		// TODO: Make it so that if the player attempts to propel towards a designated platform WHILE in midair they will basically teleport there
@@ -45,6 +45,7 @@ public class Hanging : MonoBehaviour
 		{
 			HangOnWall(true);
 			StartCameraHangMove();
+			StartHangTimer();
 		}
 
 		if (playerStats.isHanging)
@@ -76,6 +77,19 @@ public class Hanging : MonoBehaviour
 			hangPitch = 0f;
 		}
 	}
+
+	void StartHangTimer()
+    {
+		if (hangTimerRoutine != null) StopCoroutine(hangTimerRoutine);
+		hangTimerRoutine = null;
+        hangTimerRoutine = StartCoroutine(HangTimer());
+    }
+
+	IEnumerator HangTimer()
+    {
+        yield return new WaitForSeconds(maxHangDuration);
+		HangOnWall(false);
+    }
 
 	void StartCameraHangMove()
 	{
