@@ -35,13 +35,16 @@ public class Hanging : MonoBehaviour
 
     void Update()
     {
+		// TODO: Give hanging a short timer
+
+		// TODO: Make it so that if you propel towards a designated platform you basically teleport there
+
+		// TODO: Make it so that if the player attempts to propel towards a designated platform WHILE in midair they will basically teleport there
+
         if (Input.GetKeyDown(preFwdAirKey) && playerStats.isTouchingWall && playerStats.HasWallInFront())
 		{
 			HangOnWall(true);
-
 			StartCameraHangMove();
-			
-			// TODO: The camera successfully works while hanging, now make the player's prepulsion direction be based on where the CAMERA is facing instead of where the PLAYER is facing
 		}
 
 		if (playerStats.isHanging)

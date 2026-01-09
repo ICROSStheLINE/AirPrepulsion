@@ -25,12 +25,13 @@ public class Prepulsion : MonoBehaviour
 		hanging = GetComponent<Hanging>();
     }
 
-    void Update()
+	void Update()
     {
 		if (Input.GetKeyUp(preFwdAirKey) && playerStats.isHanging)
 		{
+			Vector3 launchForward = GetLaunchForward();
 			hanging.HangOnWall(false);
-			StartCoroutine("PropelForwardAir");
+			StartCoroutine(PropelForwardAir(launchForward));
 		}
         if (Input.GetKeyDown(preUpKey) && playerStats.isTouchingFloor)
 		{
@@ -38,13 +39,23 @@ public class Prepulsion : MonoBehaviour
 		}
     }
 
-	IEnumerator PropelForwardAir()
+	Vector3 GetLaunchForward()
+	{
+		Vector3 cameraForward = Camera.main.transform.forward;
+		cameraForward.y = 0f;
+
+		return cameraForward.normalized;
+	}
+
+	IEnumerator PropelForwardAir(Vector3 launchForward)
 	{
 		//playerStats.TeleportToRandomWall();
 
 		anim.SetBool("AirKickFwd", true);
+		Quaternion targetRotation = Quaternion.LookRotation(launchForward, Vector3.up);
+		rb.MoveRotation(targetRotation);
 		yield return new WaitForSeconds(preFwdAirAnimationDuration/4);
-		rb.linearVelocity = (transform.forward * 10f) + (Vector3.up * 4f);
+		rb.linearVelocity = (launchForward * 10f) + (Vector3.up * 4f);
 		anim.SetBool("AirKickFwd", false);
 	}
 
