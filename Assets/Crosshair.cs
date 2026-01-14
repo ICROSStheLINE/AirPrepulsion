@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class Crosshair : MonoBehaviour
 {
+	// GameObject playerObject;
+	// PlayerStats playerStats;
     Animator anim;
     LayerMask designatedPlatformLayerMask;
     [SerializeField] RectTransform crosshairRectTransform;
@@ -12,6 +14,8 @@ public class Crosshair : MonoBehaviour
 
     void Start()
     {
+		// playerObject = GameObject.FindWithTag("Player");
+		// playerStats = playerObject.GetComponent<PlayerStats>();
         anim = GetComponent<Animator>();
         designatedPlatformLayerMask = LayerMask.GetMask("DesignatedPlatform");
         screenCenter = new Vector3(Screen.width / 2f, Screen.height / 2f, 0f);

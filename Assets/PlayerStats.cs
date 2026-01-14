@@ -5,6 +5,8 @@ using UnityEngine;
 public class PlayerStats : MonoBehaviour
 {
 	Animator anim;
+	GameObject crosshairGameObject;
+	Crosshair crosshair;
 
 	[HideInInspector] public bool canMove = true;
 	[HideInInspector] public bool canLook = true;
@@ -16,18 +18,30 @@ public class PlayerStats : MonoBehaviour
 	[HideInInspector] public readonly HashSet<GameObject> touchingWalls = new HashSet<GameObject>();
 	[HideInInspector] public GameObject interactedWall = null;
 
+	bool test = true;
 
     void Start()
     {
         anim = GetComponent<Animator>();
+		crosshairGameObject = GameObject.FindWithTag("Crosshair");
+		crosshair = crosshairGameObject.GetComponent<Crosshair>();
     }
 
     void Update()
     {
-
+		if (test != isTouchingWall)
+		{
+			Debug.Log(isTouchingWall);
+			test = isTouchingWall;
+		}
     }
 
 	// Helper functions galore //
+
+	public void EnableCrosshair(bool enable)
+	{
+		crosshairGameObject.SetActive(enable);
+	}
 
 	public void ReceivedContact(string surfaceTag, Collider surfaceCollision)
 	{
@@ -53,7 +67,7 @@ public class PlayerStats : MonoBehaviour
 		if (surfaceTag == "Wall")
 		{
 			touchingWalls.Remove(surfaceCollision.gameObject);
-			isTouchingWall = false;
+			if (touchingWalls.Count == 0) isTouchingWall = false;
 		}
 	}
 	
