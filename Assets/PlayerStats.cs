@@ -52,7 +52,12 @@ public class PlayerStats : MonoBehaviour
 		}
 		if (surfaceTag == "Wall")
 		{
-			touchingWalls.Add(surfaceCollision.gameObject);
+			foreach (GameObject wall in touchingWalls)
+			{
+				if (wall == null) continue;
+				if (wall == surfaceCollision.gameObject) break;
+				touchingWalls.Add(surfaceCollision.gameObject);
+			}
 			isTouchingWall = true;
 		}
 	}

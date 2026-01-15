@@ -12,7 +12,7 @@ public class SurfaceDetector : MonoBehaviour
 		playerStats = transform.root.GetComponent<PlayerStats>();
 	}
 	
-    void OnTriggerEnter(Collider collider)
+    void OnTriggerStay(Collider collider)
 	{
 		if (collider.gameObject.tag == surfaceTag)
 		{
