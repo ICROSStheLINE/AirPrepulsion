@@ -27,6 +27,8 @@ public class Prepulsion : MonoBehaviour
 
 	void Update()
     {
+		// TODO: Make it so that if you propel towards a designated platform you basically teleport there
+
 		if (Input.GetKeyUp(preFwdAirKey) && playerStats.isHanging)
 		{
 			Vector3 launchForward = GetLaunchForward();
@@ -44,7 +46,9 @@ public class Prepulsion : MonoBehaviour
 		Vector3 cameraForward = Camera.main.transform.forward;
 		cameraForward.y = 0f;
 
-		return cameraForward.normalized;
+		const float rightYawDegrees = 0f;
+		Quaternion rightYaw = Quaternion.AngleAxis(rightYawDegrees, Vector3.up);
+		return (rightYaw * cameraForward).normalized;
 	}
 
 	IEnumerator PropelForwardAir(Vector3 launchForward)
