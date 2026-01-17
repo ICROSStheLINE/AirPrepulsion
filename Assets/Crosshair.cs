@@ -2,11 +2,12 @@ using UnityEngine;
 
 public class Crosshair : MonoBehaviour
 {
-	// GameObject playerObject;
-	// PlayerStats playerStats;
+	GameObject playerObject;
+	PlayerStats playerStats;
     Animator anim;
-    LayerMask designatedPlatformLayerMask;
+    LayerMask telepulsionPlatformLayerMask;
     [SerializeField] RectTransform crosshairRectTransform;
+    Vector3 targetPos;
     Vector3 screenCenter;
     float dogshitAimRadius = 1f;
     float platformInteractionDistance = 35f;
@@ -14,32 +15,39 @@ public class Crosshair : MonoBehaviour
 
     void Start()
     {
-		// playerObject = GameObject.FindWithTag("Player");
-		// playerStats = playerObject.GetComponent<PlayerStats>();
+		playerObject = GameObject.FindWithTag("Player");
+		playerStats = playerObject.GetComponent<PlayerStats>();
         anim = GetComponent<Animator>();
-        designatedPlatformLayerMask = LayerMask.GetMask("DesignatedPlatform");
+        telepulsionPlatformLayerMask = LayerMask.GetMask("TelepulsionPlatform");
         screenCenter = new Vector3(Screen.width / 2f, Screen.height / 2f, 0f);
     }
 
     void Update()
     {
-        CheckForDesignatedPlatform();
+        RaycastForTelepulsionPlatform();
+        PositionCrosshair();
     }
 
-    void CheckForDesignatedPlatform()
+    void RaycastForTelepulsionPlatform()
     {
         screenCenter = new Vector3(Screen.width / 2f, Screen.height / 2f, 0f);
-        anim.SetBool("HoveringItem", false);
         Ray ray = new Ray(Camera.main.transform.position, Camera.main.transform.forward);
         RaycastHit hit;
-        Vector3 targetPos = screenCenter;
+        targetPos = screenCenter;
+        playerStats.isHoveringTelepulsionWall = false;
 
         // Raycast for picking up objects
-        if (Physics.SphereCast(ray, dogshitAimRadius, out hit, platformInteractionDistance, designatedPlatformLayerMask))
+        if (Physics.SphereCast(ray, dogshitAimRadius, out hit, platformInteractionDistance, telepulsionPlatformLayerMask))
         {
             targetPos = Camera.main.WorldToScreenPoint(hit.collider.transform.position);
-            anim.SetBool("HoveringItem", true);
+            playerStats.isHoveringTelepulsionWall = true;
+            playerStats.hoveredTelepulsionWall = hit.transform.gameObject;
         }
+    }
+
+    void PositionCrosshair()
+    {
+        anim.SetBool("HoveringItem", playerStats.isHoveringTelepulsionWall);
 
         crosshairRectTransform.position = Vector3.Lerp(
             crosshairRectTransform.position,

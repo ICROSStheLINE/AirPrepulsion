@@ -14,11 +14,12 @@ public class PlayerStats : MonoBehaviour
 
     [HideInInspector] public bool isTouchingFloor = true;
 	[HideInInspector] public bool isTouchingWall = false;
+	[HideInInspector] public bool isHoveringTelepulsionWall = false;
+	[HideInInspector] public GameObject hoveredTelepulsionWall = null;
 	[HideInInspector] public bool isHanging = false;
 	[HideInInspector] public readonly HashSet<GameObject> touchingWalls = new HashSet<GameObject>();
 	[HideInInspector] public GameObject interactedWall = null;
 
-	bool test = true;
 
     void Start()
     {
@@ -29,11 +30,7 @@ public class PlayerStats : MonoBehaviour
 
     void Update()
     {
-		if (test != isTouchingWall)
-		{
-			Debug.Log(isTouchingWall);
-			test = isTouchingWall;
-		}
+		
     }
 
 	// Helper functions galore //

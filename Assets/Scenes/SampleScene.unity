@@ -503,7 +503,7 @@ GameObject:
   - component: {fileID: 1740063614}
   - component: {fileID: 1740063618}
   m_Layer: 6
-  m_Name: DesignatedPlatform
+  m_Name: TelepulsionPlatform
   m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -740,6 +740,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   crosshairRectTransform: {fileID: 8556057516183435157}
+  targetPos: {x: 0, y: 0, z: 0}
+  isHoveringItem: 0
 --- !u!1001 &2283266790578805730
 PrefabInstance:
   m_ObjectHideFlags: 0

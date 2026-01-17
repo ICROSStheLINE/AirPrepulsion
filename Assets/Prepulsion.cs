@@ -29,7 +29,7 @@ public class Prepulsion : MonoBehaviour
     {
 		// TODO: Make it so that if you propel towards a designated platform you basically teleport there
 
-		if (Input.GetKeyUp(preFwdAirKey) && playerStats.isHanging)
+		if (Input.GetKeyUp(preFwdAirKey) && playerStats.isHanging && !playerStats.isHoveringTelepulsionWall)
 		{
 			Vector3 launchForward = GetLaunchForward();
 			hanging.HangOnWall(false);
