@@ -42,8 +42,6 @@ public class Hanging : MonoBehaviour
         if (Input.GetKeyDown(preFwdAirKey) && playerStats.isTouchingWall && playerStats.HasWallInFront() && !playerStats.isHanging)
 		{
 			HangOnWall(true);
-			StartCameraHangMove();
-			StartHangTimer();
 		}
 
 		if (playerStats.isHanging)
@@ -52,7 +50,7 @@ public class Hanging : MonoBehaviour
 		}
     }
 	
-	public void HangOnWall(bool hangStatus = true)
+	public void HangOnWall(bool hangStatus)
 	{
 		if (hangStatus) playerStats.TeleportToRandomWall();
 		playerStats.canMove = !hangStatus;
@@ -75,6 +73,35 @@ public class Hanging : MonoBehaviour
 			hangYaw = 0f;
 			hangPitch = 0f;
 		}
+		StartCameraHangMove();
+		StartHangTimer();
+	}
+
+	public void HangOnWall(bool hangStatus, GameObject wall)
+	{
+		if (hangStatus) playerStats.TeleportToWall(wall);
+		playerStats.canMove = !hangStatus;
+		playerStats.canLook = !hangStatus;
+		playerStats.canOcclusionCheck = !hangStatus;
+		playerStats.isHanging = hangStatus;
+		playerStats.EnableCrosshair(hangStatus);
+		if (hangStatus) playerStats.FaceTowardsSpot(wall);
+		anim.SetBool("Hanging", hangStatus);
+		rb.isKinematic = hangStatus;
+
+		if (!hangStatus && cameraHangRoutine != null)
+		{
+			StopCoroutine(cameraHangRoutine);
+			cameraHangRoutine = null;
+		}
+
+		if (!hangStatus)
+		{
+			hangYaw = 0f;
+			hangPitch = 0f;
+		}
+		StartCameraHangMove();
+		StartHangTimer();
 	}
 
 	void StartHangTimer()

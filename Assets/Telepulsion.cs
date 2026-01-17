@@ -17,13 +17,13 @@ public class Telepulsion : MonoBehaviour
 		playerStats = GetComponent<PlayerStats>();
 		hanging = GetComponent<Hanging>();
     }
-
     void Update()
     {
-        if (Input.GetKeyUp(preFwdAirKey) && playerStats.isHanging && !playerStats.isHoveringTelepulsionWall)
-		{
-			hanging.HangOnWall(false);
-            // Teleport to the telepulsion platform
-		}
+        if (Input.GetKeyUp(preFwdAirKey) && playerStats.isHanging && playerStats.isHoveringTelepulsionWall)
+        {
+            hanging.HangOnWall(false);
+            playerStats.TeleportToWall(playerStats.hoveredTelepulsionWall);
+            hanging.HangOnWall(true, playerStats.hoveredTelepulsionWall);
+        }
     }
 }

@@ -73,10 +73,23 @@ public class PlayerStats : MonoBehaviour
 			if (touchingWalls.Count == 0) isTouchingWall = false;
 		}
 	}
+
+	public void TeleportToWall(GameObject wall)
+	{
+		interactedWall = wall;
+
+		Collider wallCollider = interactedWall.GetComponent<Collider>();
+		Vector3 closestPoint = wallCollider.ClosestPoint(transform.position);
+		Vector3 awayFromWall = transform.position - closestPoint;
+		awayFromWall.y = 0f;
+		awayFromWall = awayFromWall.normalized;
+
+		const float wallClearance = 0.4f;
+		transform.position = closestPoint + awayFromWall * wallClearance;
+	}
 	
 	public void TeleportToRandomWall() 
 	{
-		Vector3 awayFromWall;
 		interactedWall = null;
 		foreach (GameObject wall in touchingWalls)
 		{
@@ -92,7 +105,7 @@ public class PlayerStats : MonoBehaviour
 
 		Collider wallCollider = interactedWall.GetComponent<Collider>();
 		Vector3 closestPoint = wallCollider.ClosestPoint(transform.position);
-		awayFromWall = transform.position - closestPoint;
+		Vector3 awayFromWall = transform.position - closestPoint;
 		awayFromWall.y = 0f;
 		awayFromWall = awayFromWall.normalized;
 		FaceTowardsSpot(awayFromWall);
