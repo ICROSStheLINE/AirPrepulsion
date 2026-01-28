@@ -28,7 +28,8 @@ public class Telepulsion : MonoBehaviour
     void TelepulsionToWall()
     {
         hanging.HangOnWall(false);
-        playerStats.TeleportToWall(playerStats.hoveredTelepulsionWall);
         hanging.HangOnWall(true, playerStats.hoveredTelepulsionWall);
+        playerStats.TeleportToWallCentre(playerStats.hoveredTelepulsionWall);
+        playerStats.FaceTowardsSpot(playerStats.hoveredTelepulsionWall);
     }
 }

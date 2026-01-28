@@ -88,10 +88,6 @@ public class PlayerStats : MonoBehaviour
 		transform.position = closestPoint + awayFromWall * wallClearance;
 	}
 
-	public void TeleportToWallOnCrosshair(GameObject wall)
-    {
-		// TODO: This function should teleport the player to the wall that the crosshair is currently hovering over. The player should teleport to the exact location on the wall the crosshair is hovering over.
-    }
 	
 	public void TeleportToRandomWall() 
 	{
@@ -200,5 +196,18 @@ public class PlayerStats : MonoBehaviour
 		}
 
 		return false;
+	}
+
+	public void TeleportToWallCentre(GameObject wall)
+    {
+		Collider wallCollider = wall.GetComponent<Collider>();
+		Vector3 closestPoint = wallCollider.ClosestPoint(transform.position);
+		Vector3 awayFromWall = transform.position - closestPoint;
+		awayFromWall.y = 0f;
+		awayFromWall = awayFromWall.normalized;
+
+		const float wallClearance = 0.4f;
+		transform.position = wall.transform.position + awayFromWall * wallClearance;
+		transform.position += Vector3.down;
 	}
 }
