@@ -32,7 +32,7 @@ ModelImporter:
     clipAnimations:
     - serializedVersion: 16
       name: HangingIdle
-      takeName: mixamo.com
+      takeName: metarig|metarig|mixamo.com|Layer0
       internalID: -203655887218126122
       firstFrame: 0
       lastFrame: 70

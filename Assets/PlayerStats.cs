@@ -87,6 +87,11 @@ public class PlayerStats : MonoBehaviour
 		const float wallClearance = 0.4f;
 		transform.position = closestPoint + awayFromWall * wallClearance;
 	}
+
+	public void TeleportToWallOnCrosshair(GameObject wall)
+    {
+		// TODO: This function should teleport the player to the wall that the crosshair is currently hovering over. The player should teleport to the exact location on the wall the crosshair is hovering over.
+    }
 	
 	public void TeleportToRandomWall() 
 	{

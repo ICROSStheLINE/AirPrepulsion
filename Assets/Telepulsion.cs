@@ -21,9 +21,14 @@ public class Telepulsion : MonoBehaviour
     {
         if (Input.GetKeyUp(preFwdAirKey) && playerStats.isHanging && playerStats.isHoveringTelepulsionWall)
         {
-            hanging.HangOnWall(false);
-            playerStats.TeleportToWall(playerStats.hoveredTelepulsionWall);
-            hanging.HangOnWall(true, playerStats.hoveredTelepulsionWall);
+            TelepulsionToWall();
         }
+    }
+    
+    void TelepulsionToWall()
+    {
+        hanging.HangOnWall(false);
+        playerStats.TeleportToWall(playerStats.hoveredTelepulsionWall);
+        hanging.HangOnWall(true, playerStats.hoveredTelepulsionWall);
     }
 }
