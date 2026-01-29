@@ -75,7 +75,7 @@ public class Hanging : MonoBehaviour
 		}
 		StartCameraHangMove();
 		if (hangStatus) StartHangTimer();
-		else StopCoroutine(hangTimerRoutine);
+		else if (hangTimerRoutine != null) StopCoroutine(hangTimerRoutine);
 	}
 
 	public void HangOnWall(bool hangStatus, GameObject wall)
@@ -103,7 +103,7 @@ public class Hanging : MonoBehaviour
 		}
 		StartCameraHangMove();
 		if (hangStatus) StartHangTimer();
-		else StopCoroutine(hangTimerRoutine);
+		else if (hangTimerRoutine != null) StopCoroutine(hangTimerRoutine);
 	}
 
 	void StartHangTimer()
