@@ -23,6 +23,10 @@ public class Telepulsion : MonoBehaviour
         {
             TelepulsionToWall();
         }
+        else if (Input.GetKeyUp(preFwdAirKey) && playerStats.isHoveringTelepulsionWall)
+        { // Testing telepulsion without hanging
+            TelepulsionToWall();
+        }
     }
     
     void TelepulsionToWall()
