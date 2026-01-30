@@ -37,7 +37,7 @@ public class Hanging : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(preFwdAirKey) && playerStats.isTouchingWall && playerStats.HasWallInDirection(0f) && !playerStats.isHanging)
+        if (Input.GetKeyDown(preFwdAirKey) && !playerStats.isTouchingFloor && playerStats.isTouchingWall && playerStats.HasWallInDirection(0f) && !playerStats.isHanging)
 		{
 			HangOnWall(true);
 		}
