@@ -165,11 +165,11 @@ public class PlayerStats : MonoBehaviour
 		return false;
 	}
 	
-	public bool HasWallInFront(float maxAngle = 90f, float maxDistance = 40f)
+	public bool HasWallInDirection(float directionAngle = 0f, float maxAngle = 90f, float maxDistance = 40f)
 	{
-		Vector3 front = transform.forward;
-		front.y = 0f;
-		front.Normalize();
+		Vector3 direction = Quaternion.AngleAxis(directionAngle, Vector3.up) * transform.forward;
+		direction.y = 0f;
+		direction.Normalize();
 
 		foreach (GameObject wall in touchingWalls)
 		{
@@ -185,7 +185,7 @@ public class PlayerStats : MonoBehaviour
 				continue;
 			}
 
-			float angle = Vector3.Angle(front, toWall);
+			float angle = Vector3.Angle(direction, toWall);
 			if (angle <= maxAngle)
 			{
 				if (maxDistance <= 0f || toWall.sqrMagnitude <= maxDistance * maxDistance)

@@ -23,10 +23,10 @@ public class Telepulsion : MonoBehaviour
     // add I'd have to start making some basic ahh enemies or targets or SOMETHING for the 
     // player to target when jumping from wall to wall.
     // MAYBE WALL RUNNING!! ADDING WALL RUNNING WOULD BE SICK! That way the player has some 
-    // Movement options before jumping off the wall. Wall jumping shouldn't be possible on 
+    // movement options before jumping off the wall. Wall running shouldn't be possible on 
     // telepulsion platforms.
     // When a player lands on a normal wall they shouldn't immediately start hanging. Instead 
-    // they should start running on the wall somehow. Then the prepulsion key is pressed they'd 
+    // they should start running on the wall somehow. When the prepulsion key is pressed they'd 
     // hang and prepare to launch, then as usual when it's released they'd propel.
     // Holy genius
     void Update()
