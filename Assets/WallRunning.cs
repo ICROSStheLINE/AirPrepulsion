@@ -19,7 +19,7 @@ public class WallRunning : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(preUpKey) && !playerStats.isTouchingFloor)
+        if (Input.GetKeyDown(preUpKey) && !playerStats.isTouchingFloor && playerStats.isTouchingWall && playerStats.HasWallInDirection(0f) && !playerStats.isHanging)
 		{
 			BeginWallRun();
 		}

@@ -37,8 +37,6 @@ public class Hanging : MonoBehaviour
 
     void Update()
     {
-		// TODO: Make it so that if the player attempts to propel towards a designated platform WHILE in midair they will basically teleport there
-
         if (Input.GetKeyDown(preFwdAirKey) && playerStats.isTouchingWall && playerStats.HasWallInDirection(0f) && !playerStats.isHanging)
 		{
 			HangOnWall(true);
@@ -57,7 +55,7 @@ public class Hanging : MonoBehaviour
 		playerStats.canLook = !hangStatus;
 		playerStats.canOcclusionCheck = !hangStatus;
 		playerStats.isHanging = hangStatus;
-		playerStats.EnableCrosshair(hangStatus);
+		//playerStats.EnableCrosshair(hangStatus);
 		if (hangStatus) playerStats.FaceTowardsSpot(playerStats.interactedWall);
 		anim.SetBool("Hanging", hangStatus);
 		rb.isKinematic = hangStatus;
@@ -85,7 +83,7 @@ public class Hanging : MonoBehaviour
 		playerStats.canLook = !hangStatus;
 		playerStats.canOcclusionCheck = !hangStatus;
 		playerStats.isHanging = hangStatus;
-		playerStats.EnableCrosshair(hangStatus);
+		//playerStats.EnableCrosshair(hangStatus);
 		if (hangStatus) playerStats.FaceTowardsSpot(wall);
 		anim.SetBool("Hanging", hangStatus);
 		rb.isKinematic = hangStatus;
