@@ -635,15 +635,18 @@ PrefabInstance:
       addedObject: {fileID: 4686219177180529568}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 44efd5c374dcd8540a0d0c95e4d28434, type: 3}
       insertIndex: 2
-      addedObject: {fileID: 3985434085386141171}
+      addedObject: {fileID: 8866696673169183566}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 44efd5c374dcd8540a0d0c95e4d28434, type: 3}
       insertIndex: 3
-      addedObject: {fileID: 4923741022848901854}
+      addedObject: {fileID: 3985434085386141171}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 44efd5c374dcd8540a0d0c95e4d28434, type: 3}
       insertIndex: 4
-      addedObject: {fileID: 4809353091677318313}
+      addedObject: {fileID: 4923741022848901854}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 44efd5c374dcd8540a0d0c95e4d28434, type: 3}
       insertIndex: 5
+      addedObject: {fileID: 4809353091677318313}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 44efd5c374dcd8540a0d0c95e4d28434, type: 3}
+      insertIndex: 6
       addedObject: {fileID: 5143434360342761769}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 44efd5c374dcd8540a0d0c95e4d28434, type: 3}
       insertIndex: -1
@@ -745,7 +748,20 @@ MonoBehaviour:
   isHoveringTelepulsionWall: 0
   hoveredTelepulsionWall: {fileID: 0}
   isHanging: 0
+  isWallRunning: 0
   interactedWall: {fileID: 0}
+--- !u!114 &8866696673169183566
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5093972206970455440}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 83cfc95adc518344d8cd207809471338, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &3985434085386141171
 MonoBehaviour:
   m_ObjectHideFlags: 0

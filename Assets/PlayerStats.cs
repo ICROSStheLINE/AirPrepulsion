@@ -17,6 +17,7 @@ public class PlayerStats : MonoBehaviour
 	[HideInInspector] public bool isHoveringTelepulsionWall = false;
 	[HideInInspector] public GameObject hoveredTelepulsionWall = null;
 	[HideInInspector] public bool isHanging = false;
+	[HideInInspector] public bool isWallRunning = false;
 	[HideInInspector] public readonly HashSet<GameObject> touchingWalls = new HashSet<GameObject>();
 	[HideInInspector] public GameObject interactedWall = null;
 
