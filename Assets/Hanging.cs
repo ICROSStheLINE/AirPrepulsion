@@ -7,6 +7,7 @@ public class Hanging : MonoBehaviour
 	Rigidbody rb;
 	Animator anim;
 	PlayerStats playerStats;
+	WallRunning wallRunning;
 	KeyCode preFwdAirKey = KeyCode.R;
 	Transform cameraTransform;
 	Coroutine cameraHangRoutine;
@@ -28,6 +29,7 @@ public class Hanging : MonoBehaviour
         rb = GetComponent<Rigidbody>();
 		anim = GetComponent<Animator>();
 		playerStats = GetComponent<PlayerStats>();
+		wallRunning = GetComponent<WallRunning>();
 
 		if (cameraTransform == null && Camera.main != null)
 		{
@@ -37,7 +39,12 @@ public class Hanging : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(preFwdAirKey) && !playerStats.isTouchingFloor && playerStats.isTouchingWall && playerStats.HasWallInDirection(0f) && !playerStats.isHanging)
+		if (Input.GetKeyDown(preFwdAirKey) && playerStats.isWallRunning)
+		{
+			wallRunning.WallRun(false);
+			HangOnWall(true, playerStats.interactedWall);
+		}
+        else if (Input.GetKeyDown(preFwdAirKey) && !playerStats.isTouchingFloor && playerStats.isTouchingWall && playerStats.HasWallInDirection(0f) && !playerStats.isHanging)
 		{
 			HangOnWall(true);
 		}

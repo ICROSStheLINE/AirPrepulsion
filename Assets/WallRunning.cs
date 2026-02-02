@@ -8,6 +8,7 @@ public class WallRunning : MonoBehaviour
     Rigidbody rb;
 	Animator anim;
 	PlayerStats playerStats;
+	BasicMovement basicMovement;
 	KeyCode wallRunKey = KeyCode.T;
 
     void Start()
@@ -15,6 +16,7 @@ public class WallRunning : MonoBehaviour
         rb = GetComponent<Rigidbody>();
 		anim = GetComponent<Animator>();
 		playerStats = GetComponent<PlayerStats>();
+		basicMovement = GetComponent<BasicMovement>();
     }
 
     void Update()
@@ -23,9 +25,13 @@ public class WallRunning : MonoBehaviour
 		{
 			WallRun(true);
 		}
+		if (playerStats.isWallRunning && !playerStats.canMove)
+		{
+			basicMovement.ReadMovementInput(new KeyCode[] { KeyCode.W });
+		}
     }
 
-    void WallRun(bool wallRunStatus)
+    public void WallRun(bool wallRunStatus)
     {
 		Vector3 previousFacing = transform.forward;
 		previousFacing.y = 0f;
@@ -50,18 +56,15 @@ public class WallRunning : MonoBehaviour
 				// TODO: Add your forward-direction wall-run behavior here.
 				playerStats.FaceTowardsSpot(playerStats.interactedWall);
 				playerStats.FaceTowardsSpot(transform.right);
-				anim.SetFloat("WallRunningDirection", -1f);
+				anim.SetFloat("WallRunningDirection", 1f);
 			}
 			else
 			{
 				// Player was facing towards the wall's backward direction (wall backward is to the player's left).
-				// TODO: Add your backward-direction wall-run behavior here.
 				playerStats.FaceTowardsSpot(playerStats.interactedWall);
 				playerStats.FaceTowardsSpot(-transform.right);
-				anim.SetFloat("WallRunningDirection", 1f);
+				anim.SetFloat("WallRunningDirection", -1f);
 			}
-			// Face the player directly parallel with the wall
-			// Maybe use the existing functions in PlayerStats like FaceTowardsSpot()
 		}
 		anim.SetBool("WallRunning", wallRunStatus);
 		

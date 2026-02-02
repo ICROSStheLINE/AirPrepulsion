@@ -133,41 +133,8 @@ public class PlayerStats : MonoBehaviour
 		transform.rotation = Quaternion.LookRotation(towardsObject, Vector3.up);
 	}
 	
-	public bool HasWallBehind(float maxAngle = 90f, float maxDistance = 40f)
-	{
-		Vector3 behind = -transform.forward;
-		behind.y = 0f;
-		behind.Normalize();
-
-		foreach (GameObject wall in touchingWalls)
-		{
-			if (wall == null)
-			{
-				continue;
-			}
-
-			Vector3 toWall = wall.transform.position - transform.position;
-			toWall.y = 0f;
-			if (toWall.sqrMagnitude == 0f)
-			{
-				continue;
-			}
-
-			float angle = Vector3.Angle(behind, toWall);
-			if (angle <= maxAngle)
-			{
-				if (maxDistance <= 0f || toWall.sqrMagnitude <= maxDistance * maxDistance)
-				{
-					return true;
-				}
-			}
-		}
-
-		return false;
-	}
-	
 	public bool HasWallInDirection(float directionAngle = 0f, float maxAngle = 90f, float maxDistance = 40f)
-	{
+	{// Assume maxAngle is for both sides, so 90 degrees would mean 90 degrees to the left of the character and 90 degrees to the right of the character, effectively being 180 degrees
 		Vector3 direction = Quaternion.AngleAxis(directionAngle, Vector3.up) * transform.forward;
 		direction.y = 0f;
 		direction.Normalize();
@@ -179,7 +146,9 @@ public class PlayerStats : MonoBehaviour
 				continue;
 			}
 
-			Vector3 toWall = wall.transform.position - transform.position;
+			Collider wallCollider = wall.GetComponent<Collider>();
+			Vector3 closestPoint = wallCollider.ClosestPoint(transform.position);
+			Vector3 toWall = closestPoint - transform.position;
 			toWall.y = 0f;
 			if (toWall.sqrMagnitude == 0f)
 			{

@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
@@ -60,6 +62,15 @@ public class BasicMovement : MonoBehaviour
         if (Input.GetKey(KeyCode.A)) { moveInput += Vector3.left; }
         if (Input.GetKey(KeyCode.D)) { moveInput += Vector3.right; }
     }
+    public void ReadMovementInput(KeyCode[] keyCodes)
+    {
+        moveInput = Vector3.zero;
+
+        if (Input.GetKey(KeyCode.W) && System.Array.IndexOf(keyCodes, KeyCode.W) >= 0) { moveInput += Vector3.forward; }
+        if (Input.GetKey(KeyCode.S) && System.Array.IndexOf(keyCodes, KeyCode.S) >= 0) { moveInput += Vector3.back; }
+        if (Input.GetKey(KeyCode.A) && System.Array.IndexOf(keyCodes, KeyCode.A) >= 0) { moveInput += Vector3.left; }
+        if (Input.GetKey(KeyCode.D) && System.Array.IndexOf(keyCodes, KeyCode.D) >= 0) { moveInput += Vector3.right; }
+    }
 
     void HandleLook()
     {
@@ -79,7 +90,7 @@ public class BasicMovement : MonoBehaviour
         }
     }
 
-    void HandleMovement()
+    void HandleMovement(Vector3 moveInput_ = default(Vector3))
     {
         if (moveInput.sqrMagnitude > 0f)
         {
