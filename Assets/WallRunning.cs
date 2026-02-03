@@ -10,6 +10,9 @@ public class WallRunning : MonoBehaviour
 	PlayerStats playerStats;
 	BasicMovement basicMovement;
 	KeyCode wallRunKey = KeyCode.T;
+	Coroutine wallRunTimerRoutine;
+	[Header("Random ahh Variables")]
+	[SerializeField] float maxWallRunDuration = 3f;
 
     void Start()
     {
@@ -29,6 +32,10 @@ public class WallRunning : MonoBehaviour
 		{
 			basicMovement.ReadMovementInput(new KeyCode[] { KeyCode.W });
 		}
+		if (playerStats.isTouchingWall == false)
+		{
+			WallRun(false);
+		}
     }
 
     public void WallRun(bool wallRunStatus)
@@ -41,6 +48,8 @@ public class WallRunning : MonoBehaviour
 		playerStats.canMove = !wallRunStatus;
 		playerStats.canLook = !wallRunStatus;
 		playerStats.isWallRunning = wallRunStatus;
+		rb.isKinematic = wallRunStatus;
+
 		if (wallRunStatus)
 		{
 			Vector3 wallForward = playerStats.interactedWall.transform.right;
@@ -53,7 +62,6 @@ public class WallRunning : MonoBehaviour
 			if (towardsWallForward >= towardsWallBackward)
 			{
 				// Player was facing towards the wall's forward direction (wall forward is to the player's right).
-				// TODO: Add your forward-direction wall-run behavior here.
 				playerStats.FaceTowardsSpot(playerStats.interactedWall);
 				playerStats.FaceTowardsSpot(transform.right);
 				anim.SetFloat("WallRunningDirection", 1f);
@@ -67,7 +75,21 @@ public class WallRunning : MonoBehaviour
 			}
 		}
 		anim.SetBool("WallRunning", wallRunStatus);
-		
-		rb.isKinematic = wallRunStatus;
+
+		if (wallRunStatus) StartWallRunTimer();
+		else if (wallRunTimerRoutine != null) StopCoroutine(wallRunTimerRoutine);
+    }
+
+	void StartWallRunTimer()
+    {
+		if (wallRunTimerRoutine != null) StopCoroutine(wallRunTimerRoutine);
+		wallRunTimerRoutine = null;
+        wallRunTimerRoutine = StartCoroutine(WallRunTimer());
+    }
+
+	IEnumerator WallRunTimer()
+    {
+        yield return new WaitForSeconds(maxWallRunDuration);
+		WallRun(false);
     }
 }
