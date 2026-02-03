@@ -6,7 +6,7 @@ using UnityEngine;
 public class BasicMovement : MonoBehaviour
 {
     [Header("Movement")]
-    [SerializeField] float moveSpeed = 6f;
+    [SerializeField] public float moveSpeed = 6f;
     [SerializeField] float turnSpeed = 180f;
 
     [Header("Camera")]
@@ -90,12 +90,15 @@ public class BasicMovement : MonoBehaviour
         }
     }
 
-    void HandleMovement(Vector3 moveInput_ = default(Vector3))
+    public void HandleMovement(Vector3 moveInput_ = default(Vector3), float moveSpeed_ = default(float))
     {
-        if (moveInput.sqrMagnitude > 0f)
+        if (moveInput_ == default(Vector3)) moveInput_ = moveInput;
+        if (moveSpeed_ == default(float)) moveSpeed_ = moveSpeed;
+
+        if (moveInput_.sqrMagnitude > 0f)
         {
-            moveInput.Normalize();
-            Vector3 worldMove = transform.TransformDirection(moveInput) * moveSpeed * Time.fixedDeltaTime;
+            moveInput_.Normalize();
+            Vector3 worldMove = transform.TransformDirection(moveInput_) * moveSpeed_ * Time.fixedDeltaTime;
             rb.MovePosition(rb.position + worldMove);
         }
 

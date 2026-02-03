@@ -28,9 +28,13 @@ public class WallRunning : MonoBehaviour
 		{
 			WallRun(true);
 		}
-		if (playerStats.isWallRunning && !playerStats.canMove)
+		if (playerStats.isWallRunning)
 		{
 			basicMovement.ReadMovementInput(new KeyCode[] { KeyCode.W });
+			if (!Input.GetKey(KeyCode.W))
+			{
+				basicMovement.HandleMovement(Vector3.forward, basicMovement.moveSpeed/2);
+			}
 		}
 		if (playerStats.isTouchingWall == false)
 		{
