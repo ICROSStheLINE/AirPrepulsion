@@ -29,7 +29,7 @@ public class Telepulsion : MonoBehaviour
     // they should start running on the wall somehow. When the prepulsion key is pressed they'd 
     // hang and prepare to launch, then as usual when it's released they'd propel.
     // Holy genius
-    void Update()
+    void LateUpdate()
     {
         if (Input.GetKeyUp(preFwdAirKey) && playerStats.isHanging && playerStats.isHoveringTelepulsionWall)
         {
@@ -40,7 +40,7 @@ public class Telepulsion : MonoBehaviour
             TelepulsionToWall();
         }
     }
-    
+
     void TelepulsionToWall()
     {
         hanging.HangOnWall(false);

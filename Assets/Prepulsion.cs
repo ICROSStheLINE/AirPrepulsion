@@ -11,6 +11,9 @@ public class Prepulsion : MonoBehaviour
 	KeyCode preUpKey = KeyCode.E;
 	KeyCode preFwdAirKey = KeyCode.R;
 
+	float forwardVelocity = 5f;
+	float upwardsVelocity = 8f;
+
 	static readonly float preUpAnimationDurationMultiplier = 1.2f;
 	static readonly float preUpAnimationDuration = 0.458f / preUpAnimationDurationMultiplier;
 
@@ -27,8 +30,6 @@ public class Prepulsion : MonoBehaviour
 
 	void Update()
     {
-		// TODO: Make it so that if you propel towards a designated platform you basically teleport there
-
 		if (Input.GetKeyUp(preFwdAirKey) && playerStats.isHanging && !playerStats.isHoveringTelepulsionWall)
 		{
 			Vector3 launchForward = GetLaunchForward();
@@ -59,7 +60,7 @@ public class Prepulsion : MonoBehaviour
 		Quaternion targetRotation = Quaternion.LookRotation(launchForward, Vector3.up);
 		rb.MoveRotation(targetRotation);
 		yield return new WaitForSeconds(preFwdAirAnimationDuration/4);
-		rb.linearVelocity = (launchForward * 10f) + (Vector3.up * 4f);
+		rb.linearVelocity = (launchForward * forwardVelocity) + (Vector3.up * upwardsVelocity);
 		anim.SetBool("AirKickFwd", false);
 	}
 
