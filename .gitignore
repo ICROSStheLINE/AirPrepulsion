@@ -37,6 +37,7 @@ Desktop.ini
 .vscode/
 
 # ========== Build ==========
+[Bb]uild/
 *.apk
 *.aab
 *.app

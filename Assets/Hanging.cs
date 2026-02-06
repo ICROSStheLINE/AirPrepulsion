@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Hanging : MonoBehaviour
 {
@@ -23,6 +24,9 @@ public class Hanging : MonoBehaviour
 	[SerializeField] float cameraHangMoveSpeed = 8f;
 	[SerializeField] float hangLookSensitivity = 2f;
 	float maxHangLookAngle = 60f;
+	[Header("UI")]
+	[SerializeField] GameObject hangTimerUI;
+	[SerializeField] Image hangTimerFill;
 
     void Start()
     {
@@ -35,6 +39,8 @@ public class Hanging : MonoBehaviour
 		{
 			cameraTransform = Camera.main.transform;
 		}
+
+		SetHangTimerUIActive(false);
     }
 
     void Update()
@@ -81,6 +87,7 @@ public class Hanging : MonoBehaviour
 		StartCameraHangMove();
 		if (hangStatus) StartHangTimer();
 		else if (hangTimerRoutine != null) StopCoroutine(hangTimerRoutine);
+		if (!hangStatus) SetHangTimerUIActive(false);
 	}
 
 	public void HangOnWall(bool hangStatus, GameObject wall)
@@ -109,6 +116,7 @@ public class Hanging : MonoBehaviour
 		StartCameraHangMove();
 		if (hangStatus) StartHangTimer();
 		else if (hangTimerRoutine != null) StopCoroutine(hangTimerRoutine);
+		if (!hangStatus) SetHangTimerUIActive(false);
 	}
 
 	void StartHangTimer()
@@ -120,9 +128,32 @@ public class Hanging : MonoBehaviour
 
 	IEnumerator HangTimer()
     {
-        yield return new WaitForSeconds(maxHangDuration);
-		HangOnWall(false);
+		if (maxHangDuration <= 0f)
+		{
+			SetHangTimerUIActive(false);
+			HangOnWall(false);
+			yield break;
+		}
+
+		float elapsed = 0f;
+		SetHangTimerUIActive(true);
+		while (elapsed < maxHangDuration && playerStats.isHanging)
+		{
+			elapsed += Time.deltaTime;
+			float remaining = Mathf.Clamp01(1f - (elapsed / maxHangDuration));
+			if (hangTimerFill != null) hangTimerFill.fillAmount = remaining;
+			yield return null;
+		}
+
+		SetHangTimerUIActive(false);
+		if (playerStats.isHanging) HangOnWall(false);
     }
+
+	void SetHangTimerUIActive(bool active)
+	{
+		if (hangTimerUI != null) hangTimerUI.SetActive(active);
+		if (hangTimerFill != null) hangTimerFill.fillAmount = active ? 1f : 0f;
+	}
 
 	void StartCameraHangMove()
 	{

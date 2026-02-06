@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class WallRunning : MonoBehaviour
 {
@@ -13,6 +14,9 @@ public class WallRunning : MonoBehaviour
 	Coroutine wallRunTimerRoutine;
 	[Header("Random ahh Variables")]
 	[SerializeField] float maxWallRunDuration = 3f;
+	[Header("UI")]
+	[SerializeField] GameObject wallRunTimerUI;
+	[SerializeField] Image wallRunTimerFill;
 
     void Start()
     {
@@ -20,6 +24,8 @@ public class WallRunning : MonoBehaviour
 		anim = GetComponent<Animator>();
 		playerStats = GetComponent<PlayerStats>();
 		basicMovement = GetComponent<BasicMovement>();
+
+		SetWallRunTimerUIActive(false);
     }
 
     void Update()
@@ -82,6 +88,7 @@ public class WallRunning : MonoBehaviour
 
 		if (wallRunStatus) StartWallRunTimer();
 		else if (wallRunTimerRoutine != null) StopCoroutine(wallRunTimerRoutine);
+		if (!wallRunStatus) SetWallRunTimerUIActive(false);
     }
 
 	void StartWallRunTimer()
@@ -93,7 +100,30 @@ public class WallRunning : MonoBehaviour
 
 	IEnumerator WallRunTimer()
     {
-        yield return new WaitForSeconds(maxWallRunDuration);
-		WallRun(false);
+		if (maxWallRunDuration <= 0f)
+		{
+			SetWallRunTimerUIActive(false);
+			WallRun(false);
+			yield break;
+		}
+
+		float elapsed = 0f;
+		SetWallRunTimerUIActive(true);
+		while (elapsed < maxWallRunDuration && playerStats.isWallRunning)
+		{
+			elapsed += Time.deltaTime;
+			float remaining = Mathf.Clamp01(1f - (elapsed / maxWallRunDuration));
+			if (wallRunTimerFill != null) wallRunTimerFill.fillAmount = remaining;
+			yield return null;
+		}
+
+		SetWallRunTimerUIActive(false);
+		if (playerStats.isWallRunning) WallRun(false);
     }
+
+	void SetWallRunTimerUIActive(bool active)
+	{
+		if (wallRunTimerUI != null) wallRunTimerUI.SetActive(active);
+		if (wallRunTimerFill != null) wallRunTimerFill.fillAmount = active ? 1f : 0f;
+	}
 }
